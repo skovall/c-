@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    const int ROWS = 7;
+    const int COLS = 6;
+    
+    // Инициализация генератора случайных чисел
+    srand(time(nullptr));
+    
+    // Генерация матрицы 7x6 со случайными числами от 1 до 99
+    vector<vector<long long>> mat(ROWS, vector<long long>(COLS));
+    cout << "Сгенерированная матрица 7x6:" << endl;
+    for (int r = 0; r < ROWS; r++) {
+        for (int c = 0; c < COLS; c++) {
+            mat[r][c] = rand() % 99 + 1;   // числа от 1 до 99
+            cout << setw(4) << mat[r][c] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+    
+    // Предвычисляем префиксные суммы по строкам
+    vector<vector<long long>> row_pref(ROWS, vector<long long>(COLS + 1, 0));
+    for (int r = 0; r < ROWS; r++) {
+        for (int c = 1; c <= COLS; c++) {
+            row_pref[r][c] = row_pref[r][c - 1] + mat[r][c - 1];
+        }
+    }
+    
+    // Предвычисляем префиксные суммы по столбцам
+    vector<vector<long long>> col_pref(ROWS + 1, vector<long long>(COLS, 0));
+    for (int c = 0; c < COLS; c++) {
+        for (int r = 1; r <= ROWS; r++) {
+            col_pref[r][c] = col_pref[r - 1][c] + mat[r - 1][c];
+        }
+    }
+    
+    // Выводим результат в виде таблицы
+    cout << "Номер элемента | Строка | Столбец | Результат (сумма области)" << endl;
+    cout << "-------------------------------------------------------------" << endl;
+    
+    int elem_num = 1;
+    for (int r = 1; r <= ROWS; r++) {
+        for (int c = 1; c <= COLS; c++) {
+            // Сумма области: вся строка r до столбца c + столбец c сверху до r-1
+            long long sum_area = row_pref[r - 1][c];
+            if (r > 1) {
+                sum_area += col_pref[r - 1][c - 1];
+            }
+            
+            cout << setw(13) << elem_num 
+                 << " | " << setw(6) << r 
+                 << " | " << setw(7) << c 
+                 << " | " << setw(10) << sum_area << endl;
+            
+            elem_num++;
+        }
+    }
+    
+    return 0;
+}
