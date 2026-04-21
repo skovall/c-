@@ -1,0 +1,105 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+// Функция для создания динамической квадратной матрицы
+int** createMatrix(int n) {
+    int** matrix = new int*[n];
+    for (int i = 0; i < n; ++i) {
+        matrix[i] = new int[n];
+    }
+    return matrix;
+}
+
+// Функция для заполнения матрицы случайными числами от -100 до 100
+void fillMatrix(int** matrix, int n) {
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            matrix[i][j] = rand() % 201 - 100; // от -100 до 100
+        }
+    }
+}
+
+// Функция для вывода матрицы на экран
+void printMatrix(int** matrix, int n) {
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            std::cout << matrix[i][j] << "\t";
+        }
+        std::cout << std::endl;
+    }
+}
+
+// Функция для поворота матрицы на 90 градусов по часовой стрелке
+int** rotateMatrixClockwise(int** matrix, int n) {
+    int** rotated = createMatrix(n);
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            rotated[j][i] = matrix[n - i - 1][j];
+        }
+    }
+    return rotated;
+}
+
+// Функция для поворота матрицы на 90 градусов против часовой стрелки (дополнительно)
+int** rotateMatrixCounterClockwise(int** matrix, int n) {
+    int** rotated = createMatrix(n);
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            rotated[j][i] = matrix[i][n - j - 1];
+        }
+    }
+    return rotated;
+}
+
+// Функция для корректного освобождения памяти
+void deleteMatrix(int** matrix, int n) {
+    for (int i = 0; i < n; ++i) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+}
+
+int main() {
+    srand(time(nullptr)); // Инициализация генератора случайных чисел
+
+    int n;
+    
+    // Ввод размера матрицы с проверкой корректности
+    std::cout << "Введите размер квадратной матрицы N (положительное целое число): ";
+    std::cin >> n;
+    
+    if (n <= 0) {
+        std::cout << "Ошибка: размер матрицы должен быть положительным числом!" << std::endl;
+        return 1;
+    }
+    
+    // 1. Создание матрицы
+    int** matrix = createMatrix(n);
+    
+    // 2. Заполнение матрицы случайными числами
+    fillMatrix(matrix, n);
+    
+    // 3. Вывод исходной матрицы
+    std::cout << "\nИсходная матрица:" << std::endl;
+    printMatrix(matrix, n);
+    
+    // 4. Поворот по часовой стрелке
+    int** rotatedClockwise = rotateMatrixClockwise(matrix, n);
+    
+    // 5. Вывод преобразованной матрицы
+    std::cout << "\nМатрица после поворота на 90 градусов ПО часовой стрелке:" << std::endl;
+    printMatrix(rotatedClockwise, n);
+    
+    // Дополнительно: поворот против часовой стрелки
+    int** rotatedCounterClockwise = rotateMatrixCounterClockwise(matrix, n);
+    std::cout << "\nМатрица после поворота на 90 градусов ПРОТИВ часовой стрелки:" << std::endl;
+    printMatrix(rotatedCounterClockwise, n);
+    
+    // 6. Корректное освобождение памяти
+    deleteMatrix(matrix, n);
+    deleteMatrix(rotatedClockwise, n);
+    deleteMatrix(rotatedCounterClockwise, n);
+    
+    return 0;
+}
