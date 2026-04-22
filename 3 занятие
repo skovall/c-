@@ -4,7 +4,7 @@ using namespace std;
 
 class NaturalNumber {
 private:
-    unsigned int value; // натуральное число
+    unsigned int value;
 
 public:
     // Конструктор
@@ -20,10 +20,10 @@ public:
         return value;
     }
 
-    // Функция проверки: можно ли представить число в виде суммы квадратов натуральных чисел
+    // Функция проверки: можно ли представить число в виде суммы двух квадратов натуральных чисел
     bool canBeSumOfTwoSquares() const {
         unsigned int n = value;
-        if (n < 2) return false; // минимальная сумма квадратов натуральных чисел: 1^2 + 1^2 = 2
+        if (n < 2) return false; // минимальная сумма: 1^2 + 1^2 = 2
 
         unsigned int limit = sqrt(n);
         for (unsigned int a = 1; a <= limit; a++) {
@@ -36,11 +36,6 @@ public:
             }
         }
         return false;
-    }
-
-    // Дополнительно: вывод числа
-    void print() const {
-        cout << value;
     }
 };
 
@@ -56,29 +51,25 @@ int main() {
         return 1;
     }
 
-    // Динамический массив объектов класса NaturalNumber
-    NaturalNumber* arr = new NaturalNumber[size];
+    unsigned int* arr = new unsigned int[size];
 
-    // Ввод чисел
     cout << "Введите " << size << " натуральных чисел:\n";
     for (int i = 0; i < size; i++) {
-        unsigned int val;
-        cin >> val;
-        arr[i].setValue(val);
+        cin >> arr[i];
     }
 
-    // Подсчёт количества чисел, которые можно представить в виде суммы двух квадратов
+ 
     int count = 0;
     cout << "\nРезультаты проверки:\n";
     for (int i = 0; i < size; i++) {
-        bool can = arr[i].canBeSumOfTwoSquares();
-        cout << arr[i].getValue() << " -> " << (can ? "да" : "нет") << endl;
+        NaturalNumber num(arr[i]);  // создаём объект класса из числа массива
+        bool can = num.canBeSumOfTwoSquares();
+        cout << arr[i] << " -> " << (can ? "да" : "нет") << endl;
         if (can) count++;
     }
 
     cout << "\nКоличество чисел, которые можно представить в виде суммы квадратов натуральных чисел: " << count << endl;
 
-    // Освобождение памяти
     delete[] arr;
 
     return 0;
