@@ -5,16 +5,14 @@
 
 using namespace std;
 
-// Создание квадратной матрицы N x N
 int** createMatrix(int n) {
-    int** matrix = new int*[n];
+    int** matrix = new int* [n];
     for (int i = 0; i < n; i++) {
         matrix[i] = new int[n];
     }
     return matrix;
 }
 
-// Заполнение матрицы случайными числами от -100 до 100
 void fillMatrix(int** matrix, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -23,7 +21,6 @@ void fillMatrix(int** matrix, int n) {
     }
 }
 
-// Вывод матрицы на экран
 void printMatrix(int** matrix, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -36,32 +33,31 @@ void printMatrix(int** matrix, int n) {
 // Поворот матрицы на 90 градусов по часовой стрелке
 int** rotateMatrixClockwise(int** matrix, int n) {
     int** rotated = createMatrix(n);
-    
+
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             // rotated[j][i] = matrix[n - i - 1][j]
             rotated[j][i] = matrix[n - i - 1][j];
         }
     }
-    
+
     return rotated;
 }
 
 // Поворот матрицы на 90 градусов против часовой стрелки (дополнительно)
 int** rotateMatrixCounterClockwise(int** matrix, int n) {
     int** rotated = createMatrix(n);
-    
+
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             // rotated[j][i] = matrix[i][n - j - 1]
             rotated[j][i] = matrix[i][n - j - 1];
         }
     }
-    
+
     return rotated;
 }
 
-// Освобождение памяти матрицы
 void deleteMatrix(int** matrix, int n) {
     for (int i = 0; i < n; i++) {
         delete[] matrix[i];
@@ -69,18 +65,18 @@ void deleteMatrix(int** matrix, int n) {
     delete[] matrix;
 }
 
-// Проверка ввода размера матрицы
 int getValidSize() {
     int n;
     while (true) {
-        cout << "Введите размер квадратной матрицы N (положительное число): ";
+        cout << "Введите размер квадратной матрицы N (в пределах 0 < N <= 20): ";
         cin >> n;
-        
-        if (cin.fail() || n <= 0) {
+
+        if (cin.fail() || n <= 0 || n > 20) {
             cin.clear();
             cin.ignore(10000, '\n');
-            cout << "Ошибка! Введите положительное целое число.\n";
-        } else {
+            cout << "Ошибка! Введите целое число в пределах 0 < N <= 20.\n";
+        }
+        else {
             return n;
         }
     }
@@ -89,38 +85,27 @@ int getValidSize() {
 int main() {
     setlocale(LC_ALL, "Rus");
     srand(time(0));
-    
-    // Ввод размера матрицы
+
     int n = getValidSize();
-    
-    // 1. Создание матрицы
+
     int** matrix = createMatrix(n);
-    
-    // 2. Заполнение случайными числами
+
     fillMatrix(matrix, n);
-    
-    // 3. Вывод исходной матрицы
+
     cout << "\nИсходная матрица:\n";
     printMatrix(matrix, n);
-    
-    // 4. Поворот по часовой стрелке
+
     int** rotatedClockwise = rotateMatrixClockwise(matrix, n);
-    
-    // 5. Вывод повёрнутой матрицы
     cout << "\nМатрица после поворота на 90° по часовой стрелке:\n";
     printMatrix(rotatedClockwise, n);
-    
-    // Дополнительно: поворот против часовой стрелки
+
     int** rotatedCounter = rotateMatrixCounterClockwise(matrix, n);
     cout << "\nМатрица после поворота на 90° против часовой стрелки:\n";
     printMatrix(rotatedCounter, n);
-    
-    // 6. Освобождение памяти
+
     deleteMatrix(matrix, n);
     deleteMatrix(rotatedClockwise, n);
     deleteMatrix(rotatedCounter, n);
-    
-    cout << "\nПамять успешно освобождена.\n";
-    
+
     return 0;
 }
