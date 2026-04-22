@@ -1,0 +1,85 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class NaturalNumber {
+private:
+    unsigned int value; // натуральное число
+
+public:
+    // Конструктор
+    NaturalNumber(unsigned int v = 0) : value(v) {}
+
+    // Установить значение
+    void setValue(unsigned int v) {
+        value = v;
+    }
+
+    // Получить значение
+    unsigned int getValue() const {
+        return value;
+    }
+
+    // Функция проверки: можно ли представить число в виде суммы квадратов натуральных чисел
+    bool canBeSumOfTwoSquares() const {
+        unsigned int n = value;
+        if (n < 2) return false; // минимальная сумма квадратов натуральных чисел: 1^2 + 1^2 = 2
+
+        unsigned int limit = sqrt(n);
+        for (unsigned int a = 1; a <= limit; a++) {
+            unsigned int a2 = a * a;
+            if (a2 > n) break;
+            unsigned int b2 = n - a2;
+            unsigned int b = sqrt(b2);
+            if (b * b == b2 && b >= 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Дополнительно: вывод числа
+    void print() const {
+        cout << value;
+    }
+};
+
+int main() {
+    setlocale(LC_ALL, "Rus");
+
+    int size;
+    cout << "Введите количество элементов в массиве: ";
+    cin >> size;
+
+    if (size <= 0) {
+        cout << "Ошибка: размер массива должен быть положительным.\n";
+        return 1;
+    }
+
+    // Динамический массив объектов класса NaturalNumber
+    NaturalNumber* arr = new NaturalNumber[size];
+
+    // Ввод чисел
+    cout << "Введите " << size << " натуральных чисел:\n";
+    for (int i = 0; i < size; i++) {
+        unsigned int val;
+        cin >> val;
+        arr[i].setValue(val);
+    }
+
+    // Подсчёт количества чисел, которые можно представить в виде суммы двух квадратов
+    int count = 0;
+    cout << "\nРезультаты проверки:\n";
+    for (int i = 0; i < size; i++) {
+        bool can = arr[i].canBeSumOfTwoSquares();
+        cout << arr[i].getValue() << " -> " << (can ? "да" : "нет") << endl;
+        if (can) count++;
+    }
+
+    cout << "\nКоличество чисел, которые можно представить в виде суммы квадратов натуральных чисел: " << count << endl;
+
+    // Освобождение памяти
+    delete[] arr;
+
+    return 0;
+}
